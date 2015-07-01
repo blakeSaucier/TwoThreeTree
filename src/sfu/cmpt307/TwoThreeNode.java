@@ -20,7 +20,7 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 	}
 
 	public boolean isLeaf() {
-		return children.size() == 0;
+		return numChildren() == 0;
 	}
 
 	public int getKey() {
