@@ -56,6 +56,28 @@ public class TwoThreeTree {
 				.println("-------------------------- 2-3 Tree -------------------------------");
 		root.print();
 	}
+	
+	public int max() {
+		if (root.isLeaf()) {
+			return root.getKey();
+		}
+		TwoThreeNode node = root.getChild(root.numChildren() - 1);
+		while (!node.isLeaf()) {
+			node = node.getChild(node.numChildren() - 1);
+		}
+		return node.getKey();
+	}
+	
+	public int min() {
+		if (root.isLeaf()) {
+			return root.getKey();
+		}
+		TwoThreeNode node = root.getChild(0);
+		while (!node.isLeaf()) {
+			node = node.getChild(0);
+		}
+		return node.getKey();
+	}
 
 	private void splitChildren(TwoThreeNode node) {
 		TwoThreeNode sibling = new TwoThreeNode();

@@ -27,5 +27,8 @@ public class TwoThreeTests {
 			tree.delete(random);
 		}
 		tree.print();
+		
+		System.out.println("max element: " + tree.max());
+		System.out.println("min element: " + tree.min());
 	}
 }
