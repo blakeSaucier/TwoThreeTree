@@ -1,34 +1,29 @@
 package sfu.cmpt307;
 
-import java.util.Random;
-
 public class TwoThreeTests {
 
 	public static void main(String[] args) {
 		TwoThreeNode root = new TwoThreeNode();
 		TwoThreeNode one = new TwoThreeNode(1);
-		TwoThreeNode three = new TwoThreeNode(3);
+		TwoThreeNode two = new TwoThreeNode(2);
 
 		// Need to instantiate the tree with a root and two children nodes
 		root.addChild(one);
-		root.addChild(three);
+		root.addChild(two);
 		TwoThreeTree tree = new TwoThreeTree(root);
 
-		Random r = new Random();
-		for (int i = 0; i < 50; i++) {
-			int random = r.nextInt(100);
-			tree.insert(random);
+		for (int i = 0; i < 100; i++) {
+			tree.insert(i);
 		}
 
 		tree.print();
 
-		for (int i = 0; i < 25; i++) {
-			int random = r.nextInt(100);
-			tree.delete(random);
+		for (int i = 0; i < 95; i++) {
+			tree.delete(i);
 		}
+		
 		tree.print();
 		
-		System.out.println("max element: " + tree.max());
-		System.out.println("min element: " + tree.min());
+		System.out.println("total leafs underneath: " + tree.totalLeafs());
 	}
 }

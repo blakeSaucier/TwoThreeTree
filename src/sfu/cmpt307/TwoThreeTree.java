@@ -33,11 +33,20 @@ public class TwoThreeTree {
 		if (nodeToDelete.getKey() != key) {
 			System.out.println("Key " + key
 					+ " could not be found, nothing deleted");
-		} else if (nodeToDelete.getParent().numChildren() == 3) {
-			TwoThreeNode parent = nodeToDelete.getParent();
-			parent.getChildren().remove(nodeToDelete);
-		} else if (nodeToDelete.getParent().numChildren() == 2) {
+		} else {
+			delete(nodeToDelete);
+		}
+	}
+
+	private void delete(TwoThreeNode nodeToDelete) {
+		TwoThreeNode parent = nodeToDelete.getParent();
+		if (parent.numChildren() == 3) {
+			parent.removeChild(nodeToDelete);
+		} else if (parent.numChildren() == 2) {
 			mergeChildren(nodeToDelete);
+		} else {
+			throw new IllegalArgumentException(
+					"Parent node has too many children");
 		}
 	}
 
@@ -53,10 +62,10 @@ public class TwoThreeTree {
 
 	public void print() {
 		System.out
-				.println("-------------------------- 2-3 Tree -------------------------------");
+				.println("\n-------------------------- 2-3 Tree -------------------------------\n");
 		root.print();
 	}
-	
+
 	public int max() {
 		if (root.isLeaf()) {
 			return root.getKey();
@@ -67,7 +76,7 @@ public class TwoThreeTree {
 		}
 		return node.getKey();
 	}
-	
+
 	public int min() {
 		if (root.isLeaf()) {
 			return root.getKey();
@@ -79,14 +88,29 @@ public class TwoThreeTree {
 		return node.getKey();
 	}
 
+	// Not Yet Implemented
+	public int findKthSmallest(int k) {
+		if (k == 1) {
+			return min();
+		}
+		throw new IllegalAccessError("Not yet implemented");
+	}
+
+	public int totalLeafs() {
+		return this.root.getTotalLeafsUnderneath();
+	}
+	
+	////////////////////////////////////////////////////////////////////
+	// Private methods
+
 	private void splitChildren(TwoThreeNode node) {
 		TwoThreeNode sibling = new TwoThreeNode();
 
 		sibling.addChild(node.getChild(2));
 		sibling.addChild(node.getChild(3));
 
-		node.getChildren().remove(3);
-		node.getChildren().remove(2);
+		node.removeChild(3);
+		node.removeChild(2);
 
 		if (node == root) {
 			makeNewRoot(node, sibling);
@@ -108,24 +132,14 @@ public class TwoThreeTree {
 
 	private void mergeChildren(TwoThreeNode nodeToDelete) {
 		TwoThreeNode parent = nodeToDelete.getParent();
-		parent.getChildren().remove(nodeToDelete);
+		parent.removeChild(nodeToDelete);
 		if (parent == root) {
 			if (root.numChildren() < 2) {
 				root = parent.getChild(0);
 			}
 		} else {
 			TwoThreeNode sibling = findSibling(parent);
-			if (sibling.numChildren() == 2) {
-				// sibling node has room for the dangling node
-				sibling.addChild(parent.getChild(0));
-				parent.getChildren().remove(0);
-				mergeChildren(parent);
-			} else if (sibling.numChildren() == 3) {
-				// sibling can have a node removed and merged with remaining
-				// dangling node
-				parent.addChild(sibling.getChild(2));
-				sibling.getChildren().remove(2);
-			}
+			shiftRemainingNodesToSibling(parent, sibling);
 		}
 	}
 
@@ -146,6 +160,27 @@ public class TwoThreeTree {
 					+ node);
 		}
 		return sibling;
+	}
+
+	private void shiftRemainingNodesToSibling(TwoThreeNode parent,
+			TwoThreeNode sibling) {
+		if (sibling.numChildren() == 2) {
+			// sibling node has room for the remaining leaf node - After which the parent becomes a dangling node and needs to be deleted.
+			sibling.addChild(parent.getChild(0));
+			parent.removeChild(0);
+			delete(parent);
+		} else if (sibling.numChildren() == 3) {
+			if (parent.getLargestFirstSubtree() > sibling
+					.getLargestFirstSubtree()) {
+				// sibling is on the LEFT
+				parent.addChild(sibling.getChild(2));
+				sibling.removeChild(2);
+			} else {
+				// sibling is on the RIGHT
+				parent.addChild(sibling.getChild(0));
+				sibling.removeChild(0);
+			}
+		}
 	}
 
 	private TwoThreeNode depthSearch(TwoThreeNode root, int searchKey) {

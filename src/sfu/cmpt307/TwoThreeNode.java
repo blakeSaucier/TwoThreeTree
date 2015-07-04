@@ -9,9 +9,11 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 	private TwoThreeNode parent;
 	private Integer valueKey;
 	private List<TwoThreeNode> children;
+	private int totalLeafsUnderneath;
 
 	public TwoThreeNode() {
 		children = new ArrayList<TwoThreeNode>();
+		this.totalLeafsUnderneath = 0;
 	}
 
 	public TwoThreeNode(int valueKey) {
@@ -23,16 +25,16 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 		return numChildren() == 0;
 	}
 
+	public boolean isDangling() {
+		return this.isLeaf() && valueKey == null;
+	}
+
 	public int getKey() {
 		if (!this.isLeaf()) {
 			throw new NullPointerException(
 					"Trying to get value from internal node");
 		}
 		return this.valueKey;
-	}
-
-	public List<TwoThreeNode> getChildren() {
-		return this.children;
 	}
 
 	public TwoThreeNode getChild(int index) {
@@ -43,10 +45,51 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 		if (numChildren() <= 3) {
 			children.add(node);
 			node.setParent(this);
+			if (node.isLeaf()) {
+				incrementLeafCount(1);
+			} else {
+				incrementLeafCount(node.getTotalLeafsUnderneath());
+			}
 			Collections.sort(children);
 		} else {
 			throw new IllegalArgumentException("Node has too many children!");
 		}
+	}
+
+	public void removeChild(int index) {
+		TwoThreeNode childToRemove = children.get(index);
+		if (childToRemove.isLeaf() && !childToRemove.isDangling()) {
+			decrementLeafCount(1);
+		} else {
+			decrementLeafCount(children.get(index).getTotalLeafsUnderneath());
+		}
+		children.remove(index);
+	}
+
+	public void removeChild(TwoThreeNode nodeToRemove) {
+		for (int i = 0; i < children.size(); i++) {
+			if (children.get(i) == nodeToRemove) {
+				removeChild(i);
+			}
+		}
+	}
+
+	public void incrementLeafCount(int numLeaves) {
+		this.totalLeafsUnderneath += numLeaves;
+		if (this.parent != null) {
+			getParent().incrementLeafCount(numLeaves);
+		}
+	}
+
+	public void decrementLeafCount(int numLeaves) {
+		this.totalLeafsUnderneath -= numLeaves;
+		if (this.parent != null) {
+			getParent().decrementLeafCount(numLeaves);
+		}
+	}
+
+	public int getTotalLeafsUnderneath() {
+		return this.totalLeafsUnderneath;
 	}
 
 	public void setParent(TwoThreeNode parent) {
@@ -100,8 +143,12 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 		if (isLeaf()) {
 			return "key value: " + this.valueKey;
 		} else {
-			return "Node L: " + String.valueOf(getLargestFirstSubtree())
-					+ ", R: " + String.valueOf(getLargestSecondSubtree());
+			return "Node L: "
+					+ String.valueOf(getLargestFirstSubtree())
+					+ ", R: "
+					+ String.valueOf(getLargestSecondSubtree()
+							+ " total leafs: "
+							+ String.valueOf(totalLeafsUnderneath));
 		}
 	}
 
