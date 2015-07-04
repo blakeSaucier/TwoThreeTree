@@ -38,18 +38,6 @@ public class TwoThreeTree {
 		}
 	}
 
-	private void delete(TwoThreeNode nodeToDelete) {
-		TwoThreeNode parent = nodeToDelete.getParent();
-		if (parent.numChildren() == 3) {
-			parent.removeChild(nodeToDelete);
-		} else if (parent.numChildren() == 2) {
-			mergeChildren(nodeToDelete);
-		} else {
-			throw new IllegalArgumentException(
-					"Parent node has too many children");
-		}
-	}
-
 	// Search traverses the tree until reaching a leaf node. It does not
 	// interpret the value of the leaf node.
 	public TwoThreeNode search(int searchKey) {
@@ -88,20 +76,50 @@ public class TwoThreeTree {
 		return node.getKey();
 	}
 
-	// Not Yet Implemented
 	public int findKthSmallest(int k) {
-		if (k == 1) {
-			return min();
+		TwoThreeNode node = this.root;
+		if (k > node.getTotalLeafsUnderneath() || k < 1) {
+			throw new IllegalArgumentException("Invalid value for k: " + k);
 		}
-		throw new IllegalAccessError("Not yet implemented");
+		int rangeCounter = 0;
+		while (!node.isLeaf()) {
+			int leftLeafCount = leavesAtChild(0, node);
+			int middleLeafCount = leavesAtChild(1, node);
+			if (leftLeafCount + rangeCounter >= k) {
+				node = node.getChild(0);
+			} else if (node.numChildren() == 2) {
+				rangeCounter += leftLeafCount;
+				node = node.getChild(1);
+			} else if ((leftLeafCount + rangeCounter < k)
+					&& (leftLeafCount + middleLeafCount + rangeCounter >= k)) {
+				rangeCounter += leftLeafCount;
+				node = node.getChild(1);
+			} else {
+				rangeCounter += (leftLeafCount + middleLeafCount);
+				node = node.getChild(2);
+			}
+		}
+		return node.getKey();
 	}
 
 	public int totalLeafs() {
 		return this.root.getTotalLeafsUnderneath();
 	}
-	
-	////////////////////////////////////////////////////////////////////
+
+	// //////////////////////////////////////////////////////////////////
 	// Private methods
+	
+	private void delete(TwoThreeNode nodeToDelete) {
+		TwoThreeNode parent = nodeToDelete.getParent();
+		if (parent.numChildren() == 3) {
+			parent.removeChild(nodeToDelete);
+		} else if (parent.numChildren() == 2) {
+			mergeChildren(nodeToDelete);
+		} else {
+			throw new IllegalArgumentException(
+					"Parent node has too many children");
+		}
+	}
 
 	private void splitChildren(TwoThreeNode node) {
 		TwoThreeNode sibling = new TwoThreeNode();
@@ -165,7 +183,8 @@ public class TwoThreeTree {
 	private void shiftRemainingNodesToSibling(TwoThreeNode parent,
 			TwoThreeNode sibling) {
 		if (sibling.numChildren() == 2) {
-			// sibling node has room for the remaining leaf node - After which the parent becomes a dangling node and needs to be deleted.
+			// sibling node has room for the remaining leaf node - After which
+			// the parent becomes a dangling node and needs to be deleted.
 			sibling.addChild(parent.getChild(0));
 			parent.removeChild(0);
 			delete(parent);
@@ -181,6 +200,13 @@ public class TwoThreeTree {
 				sibling.removeChild(0);
 			}
 		}
+	}
+	
+	private int leavesAtChild(int index, TwoThreeNode node) {
+		if (node.getChild(index).isLeaf()) {
+			return 1;
+		}
+		return node.getChild(index).getTotalLeafsUnderneath();
 	}
 
 	private TwoThreeNode depthSearch(TwoThreeNode root, int searchKey) {

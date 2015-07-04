@@ -12,18 +12,13 @@ public class TwoThreeTests {
 		root.addChild(two);
 		TwoThreeTree tree = new TwoThreeTree(root);
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 1; i < 50; i++) {
 			tree.insert(i);
 		}
 
 		tree.print();
-
-		for (int i = 0; i < 95; i++) {
-			tree.delete(i);
+		for(int i = 1; i< 50; i++) {
+			System.out.println(i + "th smallest element: " + tree.findKthSmallest(i));
 		}
-		
-		tree.print();
-		
-		System.out.println("total leafs underneath: " + tree.totalLeafs());
 	}
 }
