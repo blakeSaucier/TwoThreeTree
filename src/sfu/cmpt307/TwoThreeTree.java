@@ -17,7 +17,7 @@ public class TwoThreeTree {
 		if (root.isLeaf()) {
 			root.addChild(nodeToInsert);
 		} else {
-			TwoThreeNode searchResult = search(nodeToInsert.getKey());
+			TwoThreeNode searchResult = depthFirstSearch(nodeToInsert.getKey());
 			if (searchResult.getKey() != nodeToInsert.getKey()) {
 				TwoThreeNode parentNode = searchResult.getParent();
 				parentNode.addChild(nodeToInsert);
@@ -29,7 +29,7 @@ public class TwoThreeTree {
 	}
 
 	public void delete(int key) {
-		TwoThreeNode nodeToDelete = search(key);
+		TwoThreeNode nodeToDelete = depthFirstSearch(key);
 		if (nodeToDelete.getKey() != key) {
 			System.out.println("Key " + key
 					+ " could not be found, nothing deleted");
@@ -38,14 +38,12 @@ public class TwoThreeTree {
 		}
 	}
 
-	// Search traverses the tree until reaching a leaf node. It does not
-	// interpret the value of the leaf node.
-	public TwoThreeNode search(int searchKey) {
-		if (root.isLeaf()) {
-			return root;
-		} else {
-			return depthSearch(root, searchKey);
+	public TwoThreeNode search(int key) {
+		TwoThreeNode result = depthFirstSearch(key);
+		if (result.getKey() != key) {
+			throw new IllegalArgumentException("Key: " + key + " does not exist in tree");
 		}
+		return result;
 	}
 
 	public void print() {
@@ -108,6 +106,16 @@ public class TwoThreeTree {
 
 	// //////////////////////////////////////////////////////////////////
 	// Private methods
+	
+	// Search traverses the tree until reaching a leaf node. It does not
+	// interpret the value of the leaf node.
+	private TwoThreeNode depthFirstSearch(int searchKey) {
+		if (root.isLeaf()) {
+			return root;
+		} else {
+			return traverseTree(root, searchKey);
+		}
+	}
 	
 	private void delete(TwoThreeNode nodeToDelete) {
 		TwoThreeNode parent = nodeToDelete.getParent();
@@ -209,18 +217,18 @@ public class TwoThreeTree {
 		return node.getChild(index).getTotalLeafsUnderneath();
 	}
 
-	private TwoThreeNode depthSearch(TwoThreeNode root, int searchKey) {
+	private TwoThreeNode traverseTree(TwoThreeNode root, int searchKey) {
 		if (searchKey <= root.getLargestFirstSubtree()) {
 			TwoThreeTree subtree = new TwoThreeTree(root.getChild(0));
-			return subtree.search(searchKey);
+			return subtree.depthFirstSearch(searchKey);
 		} else {
 			if (root.numChildren() == 2
 					|| searchKey <= root.getLargestSecondSubtree()) {
 				TwoThreeTree subtree = new TwoThreeTree(root.getChild(1));
-				return subtree.search(searchKey);
+				return subtree.depthFirstSearch(searchKey);
 			} else {
 				TwoThreeTree subtree = new TwoThreeTree(root.getChild(2));
-				return subtree.search(searchKey);
+				return subtree.depthFirstSearch(searchKey);
 			}
 		}
 	}
