@@ -3,7 +3,7 @@ package sfu.cmpt307.application;
 import java.io.FileNotFoundException;
 
 import sfu.cmpt307.handleInput.InputScanner;
-import sfu.cmpt307.handleInput.OperationExecutor;
+import sfu.cmpt307.handleInput.Interpreter;
 import sfu.cmpt307.twoThreeTree.TwoThreeNode;
 import sfu.cmpt307.twoThreeTree.TwoThreeTree;
 
@@ -11,8 +11,9 @@ public class TwoThreeTests {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		if (args.length > 0) {
-			OperationExecutor executor = new OperationExecutor(InputScanner.scan(args[0]));
-			executor.execute();
+			InputScanner input = InputScanner.scan(args[0]);
+			Interpreter program = new Interpreter(input);
+			program.run();
 		} else {
 			testTreeCreation();
 		}
