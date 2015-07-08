@@ -1,4 +1,5 @@
-package sfu.cmpt307;
+package sfu.cmpt307.twoThreeTree;
+
 
 public class TwoThreeTree {
 
