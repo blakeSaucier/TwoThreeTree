@@ -56,8 +56,13 @@ public class InputScanner {
 		while (line != null) {
 			String [] operationTuple = line.split("\\s+");
 			Operator operator = Operator.forLexeme(operationTuple[0]);
-			Operand operand = new Operand(Integer.parseInt(operationTuple[1]));
-			operations.add(Operation.make(operator, operand));
+			if (operator == Operator.MAX || operator == Operator.MIN) {
+				Operand operand = new Operand(0);
+				operations.add(Operation.make(operator, operand));
+			} else {
+				Operand operand = new Operand(Integer.parseInt(operationTuple[1]));
+				operations.add(Operation.make(operator, operand));
+			}
 			line = reader.readLine();
 		}
 	}

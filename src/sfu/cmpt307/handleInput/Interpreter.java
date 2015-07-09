@@ -1,5 +1,6 @@
 package sfu.cmpt307.handleInput;
 
+import sfu.cmpt307.twoThreeTree.TwoThreeNode;
 import sfu.cmpt307.twoThreeTree.TwoThreeTree;
 
 public class Interpreter {
@@ -9,7 +10,7 @@ public class Interpreter {
 	public Interpreter(InputScanner scanner) {
 		this.scanner = scanner;
 	}
-	
+
 	public static void runInterpreter(InputScanner scanner) {
 		Interpreter interpreter = new Interpreter(scanner);
 		interpreter.run();
@@ -25,56 +26,82 @@ public class Interpreter {
 			throw new IllegalArgumentException(
 					"Tree must be initialized with 2 or more elements");
 		}
-		
-		TwoThreeTree tree = TwoThreeTree.manuallyInitTwoNodes(scanner.getInitalTreeElements());
-		for(Integer element: scanner.getInitalTreeElements()) {
+		TwoThreeTree tree = TwoThreeTree.manuallyInitTwoNodes(scanner
+				.getInitalTreeElements());
+		for (Integer element : scanner.getInitalTreeElements()) {
 			tree.insert(element);
 		}
 		return tree;
 	}
-	
+
 	private void runOperations(TwoThreeTree tree) {
-		for (Operation operation: scanner.getOperations()) {
+		for (Operation operation : scanner.getOperations()) {
 			Logger.logOperation(operation);
-			switch(operation.getOperator()) {
-				case INSERT:
-					tree.insert(operation.getOperandValue());
-					break;
-				case DELETE:
+			switch (operation.getOperator()) {
+			case INSERT:
+				tree.insert(operation.getOperandValue());
+				TwoThreeNode parent = tree.search(operation.getOperandValue())
+						.getParent();
+				Logger.logResult("Ater insertion, " + parent.toString()
+						+ " is the parent of " + operation.getOperandValue());
+				break;
+			case DELETE:
+				try {
 					tree.delete(operation.getOperandValue());
-					break;
-				case FIND:
-					try {
-						tree.search(operation.getOperandValue());
-					} catch (IllegalArgumentException e) {
-						Logger.log("Could not find element " + operation.getOperandValue());
-					}
-					break;
-				case KthSMALLEST:
-					tree.findKthSmallest(operation.getOperandValue());
-					break;
-				case MAX:
-					tree.max();
-					break;
-				case MIN:
-					tree.min();
-					break;
-				case NULL_OPERATOR:
-					throw new IllegalArgumentException("Invalid tree operation: " + operation.getOperator().getLexeme());
-				default:
-					throw new IllegalArgumentException("Invalid tree operation:");
+					Logger.logResult("Deleted element "
+							+ operation.getOperandValue());
+				} catch (IllegalArgumentException e) {
+					Logger.logResult(e.getMessage());
+				}
+				break;
+			case FIND:
+				try {
+					TwoThreeNode result = tree.search(operation
+							.getOperandValue());
+					Logger.logResult("Found - " + result.getKey()
+							+ " is the child of "
+							+ result.getParent().toString());
+				} catch (IllegalArgumentException e) {
+					Logger.logResult(e.getMessage());
+				}
+				break;
+			case KthSMALLEST:
+				try {
+					int result = tree.findKthSmallest(operation
+							.getOperandValue());
+					Logger.logResult(result + " is the "
+							+ operation.getOperandValue()
+							+ "th smallest element");
+				} catch (IllegalArgumentException e) {
+					Logger.logResult(e.getMessage());
+				}
+				break;
+			case MAX:
+				int maxResult = tree.max();
+				Logger.logResult(maxResult + " is the maximum element in the tree");
+				break;
+			case MIN:
+				int minResult = tree.min();
+				Logger.logResult(minResult + " is the minimum element in the tree");
+				break;
+			case INVALID_OPERATOR:
+				Logger.logResult("***Invalid Tree Operation***");
+				break;
+			default:
+				Logger.logResult("Unknown Tree Operation");
 			}
 		}
-		tree.print();
+		//tree.printFullTree();
 	}
-	
+
 	static class Logger {
-		public static void log(String msg) {
-			System.out.println(msg);
-		}
-		
+
 		public static void logOperation(Operation op) {
-			Logger.log(op.getOperator().getLexeme() + " " + op.getOperandValue());
+			System.out.print(op + ":  \t ");
+		}
+
+		public static void logResult(String msg) {
+			System.out.print(msg + "\n");
 		}
 	}
 }

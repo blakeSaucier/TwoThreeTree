@@ -29,6 +29,6 @@ public class TwoThreeTests {
 			tree.insert(element);
 		}
 		
-		tree.print();
+		tree.printFullTree();
 	}
 }

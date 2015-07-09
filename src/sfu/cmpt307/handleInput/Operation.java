@@ -26,6 +26,9 @@ public class Operation {
 	
 	@Override
 	public String toString() {
-		return "" + operator.getLexeme() + " " + operand.getValue();
+		if (operator == Operator.MAX || operator == Operator.MIN) {
+			return operator.getLexeme() + "  ";
+		}
+		return operator.getLexeme() + " " + operand.getValue();
 	}
 }

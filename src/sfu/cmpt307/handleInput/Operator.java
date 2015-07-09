@@ -8,7 +8,7 @@ public enum Operator {
 	MIN("Min"),
 	MAX("Max"),
 	KthSMALLEST("Kth-Smallest"),
-	NULL_OPERATOR("");
+	INVALID_OPERATOR("Invalid");
 	
 	private String lexeme;
 	
@@ -26,6 +26,6 @@ public enum Operator {
 				return operator;
 			}
 		}
-		return NULL_OPERATOR;
+		return INVALID_OPERATOR;
 	}
 }

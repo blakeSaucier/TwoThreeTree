@@ -63,10 +63,15 @@ public class TwoThreeTree {
 		return result;
 	}
 
-	public void print() {
+	public void printFullTree() {
 		System.out
 				.println("\n-------------------------- 2-3 Tree -------------------------------\n");
 		root.print();
+	}
+	
+	public void printLeaves() {
+		System.out.println("\n-------------------------- Tree Leaves -------------------------------\n");
+		
 	}
 
 	public int max() {
