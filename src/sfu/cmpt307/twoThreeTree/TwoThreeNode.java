@@ -152,7 +152,7 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 		}
 	}
 
-	public void print() {
+	public void printFullTree() {
 		print("", true);
 	}
 

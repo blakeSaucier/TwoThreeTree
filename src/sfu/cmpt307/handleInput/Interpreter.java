@@ -91,6 +91,7 @@ public class Interpreter {
 				Logger.logResult("Unknown Tree Operation");
 			}
 		}
+		tree.printLeaves();
 		//tree.printFullTree();
 	}
 
