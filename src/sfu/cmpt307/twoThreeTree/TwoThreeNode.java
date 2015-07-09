@@ -143,12 +143,13 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 		if (isLeaf()) {
 			return "key value: " + this.valueKey;
 		} else {
-			return "Node L: "
+			return "[ Node L: "
 					+ String.valueOf(getLargestFirstSubtree())
 					+ ", R: "
 					+ String.valueOf(getLargestSecondSubtree()
 							+ " total leafs: "
-							+ String.valueOf(totalLeafsUnderneath));
+							+ String.valueOf(totalLeafsUnderneath))
+							+ " ]";
 		}
 	}
 

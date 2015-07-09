@@ -48,7 +48,7 @@ public class TwoThreeTree {
 	public void delete(int key) {
 		TwoThreeNode nodeToDelete = depthFirstSearch(key);
 		if (nodeToDelete.getKey() != key) {
-			System.out.println("Key " + key
+			throw new IllegalArgumentException("Key " + key
 					+ " could not be found, nothing deleted");
 		} else {
 			delete(nodeToDelete);
@@ -58,7 +58,7 @@ public class TwoThreeTree {
 	public TwoThreeNode search(int key) {
 		TwoThreeNode result = depthFirstSearch(key);
 		if (result.getKey() != key) {
-			throw new IllegalArgumentException("Key: " + key + " does not exist in tree");
+			throw new IllegalArgumentException("Key " + key + " could not be found");
 		}
 		return result;
 	}

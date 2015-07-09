@@ -35,14 +35,14 @@ public class Interpreter {
 	}
 
 	private void runOperations(TwoThreeTree tree) {
+		System.out.println("\n------------------------- Tree Operations ------------------------------\n");
 		for (Operation operation : scanner.getOperations()) {
 			Logger.logOperation(operation);
 			switch (operation.getOperator()) {
 			case INSERT:
 				tree.insert(operation.getOperandValue());
-				TwoThreeNode parent = tree.search(operation.getOperandValue())
-						.getParent();
-				Logger.logResult("Ater insertion, " + parent.toString()
+				TwoThreeNode inserted = tree.search(operation.getOperandValue());
+				Logger.logResult("Ater insertion, " + inserted.getParent().toString()
 						+ " is the parent of " + operation.getOperandValue());
 				break;
 			case DELETE:
@@ -92,7 +92,7 @@ public class Interpreter {
 			}
 		}
 		tree.printLeaves();
-		//tree.printFullTree();
+		tree.printFullTree();
 	}
 
 	static class Logger {
