@@ -1,5 +1,7 @@
 package sfu.cmpt307.twoThreeTree;
 
+import java.util.List;
+
 
 public class TwoThreeTree {
 
@@ -7,6 +9,20 @@ public class TwoThreeTree {
 
 	public TwoThreeTree(TwoThreeNode root) {
 		this.root = root;
+	}
+	
+	// Manually initializing the Two-Three tree with the first two input
+	// elements.
+	// Having a tree with only one element would break the properties of a
+	// Two-Three tree that the Insert(), Delete() operations depend on
+	public static TwoThreeTree manuallyInitTwoNodes(List<Integer> elements) {
+		TwoThreeNode root = new TwoThreeNode();
+		TwoThreeNode one = new TwoThreeNode(elements.get(0));
+		TwoThreeNode two = new TwoThreeNode(elements.get(1));
+
+		root.addChild(one);
+		root.addChild(two);
+		return new TwoThreeTree(root);
 	}
 
 	public void insert(int key) {

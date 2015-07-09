@@ -1,6 +1,5 @@
 package sfu.cmpt307.handleInput;
 
-import sfu.cmpt307.twoThreeTree.TwoThreeNode;
 import sfu.cmpt307.twoThreeTree.TwoThreeTree;
 
 public class Interpreter {
@@ -9,6 +8,11 @@ public class Interpreter {
 
 	public Interpreter(InputScanner scanner) {
 		this.scanner = scanner;
+	}
+	
+	public static void runInterpreter(InputScanner scanner) {
+		Interpreter interpreter = new Interpreter(scanner);
+		interpreter.run();
 	}
 
 	public void run() {
@@ -22,31 +26,55 @@ public class Interpreter {
 					"Tree must be initialized with 2 or more elements");
 		}
 		
-		TwoThreeTree tree = manuallyInitTwoNodes();
-		for (int i = 2; i < scanner.getInitalTreeElements().size(); i++) {
-			tree.insert(scanner.getInitalTreeElements().get(i));
+		TwoThreeTree tree = TwoThreeTree.manuallyInitTwoNodes(scanner.getInitalTreeElements());
+		for(Integer element: scanner.getInitalTreeElements()) {
+			tree.insert(element);
 		}
 		return tree;
 	}
 	
 	private void runOperations(TwoThreeTree tree) {
+		for (Operation operation: scanner.getOperations()) {
+			Logger.logOperation(operation);
+			switch(operation.getOperator()) {
+				case INSERT:
+					tree.insert(operation.getOperandValue());
+					break;
+				case DELETE:
+					tree.delete(operation.getOperandValue());
+					break;
+				case FIND:
+					try {
+						tree.search(operation.getOperandValue());
+					} catch (IllegalArgumentException e) {
+						Logger.log("Could not find element " + operation.getOperandValue());
+					}
+					break;
+				case KthSMALLEST:
+					tree.findKthSmallest(operation.getOperandValue());
+					break;
+				case MAX:
+					tree.max();
+					break;
+				case MIN:
+					tree.min();
+					break;
+				case NULL_OPERATOR:
+					throw new IllegalArgumentException("Invalid tree operation: " + operation.getOperator().getLexeme());
+				default:
+					throw new IllegalArgumentException("Invalid tree operation:");
+			}
+		}
+		tree.print();
+	}
+	
+	static class Logger {
+		public static void log(String msg) {
+			System.out.println(msg);
+		}
 		
+		public static void logOperation(Operation op) {
+			Logger.log(op.getOperator().getLexeme() + " " + op.getOperandValue());
+		}
 	}
-	
-	// Manually initializing the Two-Three tree with the first two input
-	// elements.
-	// Having a tree with only one element would break the properties of a
-	// Two-Three tree that the Insert(), Delete() operations depend on
-	private TwoThreeTree manuallyInitTwoNodes() {
-		TwoThreeNode root = new TwoThreeNode();
-		TwoThreeNode one = new TwoThreeNode(scanner.getInitalTreeElements()
-				.get(0));
-		TwoThreeNode two = new TwoThreeNode(scanner.getInitalTreeElements()
-				.get(1));
-
-		root.addChild(one);
-		root.addChild(two);
-		return new TwoThreeTree(root);
-	}
-	
 }

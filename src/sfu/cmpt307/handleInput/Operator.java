@@ -5,7 +5,7 @@ public enum Operator {
 	INSERT("Insert"),
 	DELETE("Delete"),
 	FIND("Find"),
-	Min("Min"),
+	MIN("Min"),
 	MAX("Max"),
 	KthSMALLEST("Kth-Smallest"),
 	NULL_OPERATOR("");
