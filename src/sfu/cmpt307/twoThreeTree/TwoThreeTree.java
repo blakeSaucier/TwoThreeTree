@@ -2,7 +2,6 @@ package sfu.cmpt307.twoThreeTree;
 
 import java.util.List;
 
-
 public class TwoThreeTree {
 
 	private TwoThreeNode root;
@@ -10,7 +9,7 @@ public class TwoThreeTree {
 	public TwoThreeTree(TwoThreeNode root) {
 		this.root = root;
 	}
-	
+
 	// Manually initializing the Two-Three tree with the first two input
 	// elements.
 	// Having a tree with only one element would break the properties of a
@@ -58,7 +57,8 @@ public class TwoThreeTree {
 	public TwoThreeNode search(int key) {
 		TwoThreeNode result = depthFirstSearch(key);
 		if (result.getKey() != key) {
-			throw new IllegalArgumentException("Key " + key + " could not be found");
+			throw new IllegalArgumentException("Key " + key
+					+ " could not be found");
 		}
 		return result;
 	}
@@ -68,9 +68,10 @@ public class TwoThreeTree {
 				.println("\n-------------------------- 2-3 Tree -------------------------------\n");
 		root.printFullTree();
 	}
-	
+
 	public void printLeaves() {
-		System.out.println("\n-------------------------- Tree Leaves -------------------------------");
+		System.out
+				.println("\n-------------------------- Tree Leaves -------------------------------");
 		System.out.print("[ ");
 		depthFirstPrint(root);
 		System.out.print(" ]");
@@ -124,13 +125,40 @@ public class TwoThreeTree {
 		return node.getKey();
 	}
 
+	// Modified Depth First Search that tracks the number of leaves to the LEFT
+	// every time the search goes deeper in the tree
+	public int findElementPosition(int key) {
+		TwoThreeNode node = this.root;
+		int totalLeavesCounted = 0;
+		while (!node.isLeaf()) {
+			int leftLeafCount = leavesAtChild(0, node);
+			int middleLeafCount = leavesAtChild(1, node);
+
+			if (key <= node.getLargestFirstSubtree()) {
+				node = node.getChild(0);
+			} else {
+				if (node.numChildren() == 2
+						|| key <= node.getLargestSecondSubtree()) {
+					totalLeavesCounted += leftLeafCount;
+					node = node.getChild(1);
+				} else {
+					totalLeavesCounted += leftLeafCount + middleLeafCount;
+					node = node.getChild(2);
+				}
+			}
+		}
+
+		// Counting started from 0
+		return totalLeavesCounted + 1;
+	}
+
 	public int totalLeafs() {
 		return this.root.getTotalLeafsUnderneath();
 	}
 
 	// //////////////////////////////////////////////////////////////////
 	// Private methods
-	
+
 	// Search traverses the tree until reaching a leaf node. It does not
 	// interpret the value of the leaf node.
 	private TwoThreeNode depthFirstSearch(int searchKey) {
@@ -140,7 +168,7 @@ public class TwoThreeTree {
 			return traverseTree(root, searchKey);
 		}
 	}
-	
+
 	private void depthFirstPrint(TwoThreeNode node) {
 		if (node.isLeaf()) {
 			if (node.getKey() == max()) {
@@ -149,12 +177,12 @@ public class TwoThreeTree {
 				System.out.print(node.getKey() + ", ");
 			}
 		} else {
-			for(int i = 0; i < node.numChildren(); i++) {
+			for (int i = 0; i < node.numChildren(); i++) {
 				depthFirstPrint(node.getChild(i));
 			}
 		}
 	}
-	
+
 	private void delete(TwoThreeNode nodeToDelete) {
 		TwoThreeNode parent = nodeToDelete.getParent();
 		if (parent.numChildren() == 3) {
@@ -247,7 +275,7 @@ public class TwoThreeTree {
 			}
 		}
 	}
-	
+
 	private int leavesAtChild(int index, TwoThreeNode node) {
 		if (node.getChild(index).isLeaf()) {
 			return 1;

@@ -148,8 +148,7 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 					+ ", R: "
 					+ String.valueOf(getLargestSecondSubtree()
 							+ " total leafs: "
-							+ String.valueOf(totalLeafsUnderneath))
-							+ " ]";
+							+ String.valueOf(totalLeafsUnderneath)) + " ]";
 		}
 	}
 

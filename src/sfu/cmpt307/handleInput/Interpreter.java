@@ -35,15 +35,18 @@ public class Interpreter {
 	}
 
 	private void runOperations(TwoThreeTree tree) {
-		System.out.println("\n------------------------- Tree Operations ------------------------------\n");
+		System.out
+				.println("\n------------------------- Tree Operations ------------------------------\n");
 		for (Operation operation : scanner.getOperations()) {
 			Logger.logOperation(operation);
 			switch (operation.getOperator()) {
 			case INSERT:
 				tree.insert(operation.getOperandValue());
-				TwoThreeNode inserted = tree.search(operation.getOperandValue());
-				Logger.logResult("Ater insertion, " + inserted.getParent().toString()
-						+ " is the parent of " + operation.getOperandValue());
+				TwoThreeNode inserted = tree
+						.search(operation.getOperandValue());
+				Logger.logResult("Ater insertion, " + inserted + " is the "
+						+ tree.findElementPosition(operation.getOperandValue())
+						+ " element of the list");
 				break;
 			case DELETE:
 				try {
@@ -58,9 +61,9 @@ public class Interpreter {
 				try {
 					TwoThreeNode result = tree.search(operation
 							.getOperandValue());
-					Logger.logResult("Found - " + result.getKey()
-							+ " is the child of "
-							+ result.getParent().toString());
+					Logger.logResult("Found - " + result.getKey() + " is the "
+							+ tree.findElementPosition(result.getKey())
+							+ " element in the list");
 				} catch (IllegalArgumentException e) {
 					Logger.logResult(e.getMessage());
 				}
@@ -78,11 +81,13 @@ public class Interpreter {
 				break;
 			case MAX:
 				int maxResult = tree.max();
-				Logger.logResult(maxResult + " is the maximum element in the tree");
+				Logger.logResult(maxResult
+						+ " is the maximum element in the tree");
 				break;
 			case MIN:
 				int minResult = tree.min();
-				Logger.logResult(minResult + " is the minimum element in the tree");
+				Logger.logResult(minResult
+						+ " is the minimum element in the tree");
 				break;
 			case INVALID_OPERATOR:
 				Logger.logResult("***Invalid Tree Operation***");
