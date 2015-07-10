@@ -7,7 +7,7 @@ public enum Operator {
 	FIND("Find"),
 	MIN("Min"),
 	MAX("Max"),
-	KthSMALLEST("Kth-Smallest"),
+	KthSMALLEST("KSmallest"),
 	INVALID_OPERATOR("Invalid");
 	
 	private String lexeme;

@@ -71,7 +71,7 @@ public class Interpreter {
 							.getOperandValue());
 					Logger.logResult(result + " is the "
 							+ operation.getOperandValue()
-							+ "th smallest element");
+							+ "st/nd/th smallest element");
 				} catch (IllegalArgumentException e) {
 					Logger.logResult(e.getMessage());
 				}
