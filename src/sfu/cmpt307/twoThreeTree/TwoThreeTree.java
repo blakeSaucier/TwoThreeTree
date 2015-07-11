@@ -162,11 +162,21 @@ public class TwoThreeTree {
 	// Search traverses the tree until reaching a leaf node. It does not
 	// interpret the value of the leaf node.
 	private TwoThreeNode depthFirstSearch(int searchKey) {
-		if (root.isLeaf()) {
-			return root;
-		} else {
-			return traverseTree(root, searchKey);
+		TwoThreeNode node = this.root;
+		
+		while (!node.isLeaf()) {
+			if (searchKey <= node.getLargestFirstSubtree()) {
+				node = node.getChild(0);
+			} else {
+				if (node.numChildren() == 2
+						|| searchKey <= node.getLargestSecondSubtree()) {
+					node = node.getChild(1);
+				} else {
+					node = node.getChild(2);
+				}
+			}
 		}
+		return node;
 	}
 
 	private void depthFirstPrint(TwoThreeNode node) {
@@ -281,21 +291,5 @@ public class TwoThreeTree {
 			return 1;
 		}
 		return node.getChild(index).getTotalLeafsUnderneath();
-	}
-
-	private TwoThreeNode traverseTree(TwoThreeNode root, int searchKey) {
-		if (searchKey <= root.getLargestFirstSubtree()) {
-			TwoThreeTree subtree = new TwoThreeTree(root.getChild(0));
-			return subtree.depthFirstSearch(searchKey);
-		} else {
-			if (root.numChildren() == 2
-					|| searchKey <= root.getLargestSecondSubtree()) {
-				TwoThreeTree subtree = new TwoThreeTree(root.getChild(1));
-				return subtree.depthFirstSearch(searchKey);
-			} else {
-				TwoThreeTree subtree = new TwoThreeTree(root.getChild(2));
-				return subtree.depthFirstSearch(searchKey);
-			}
-		}
 	}
 }
