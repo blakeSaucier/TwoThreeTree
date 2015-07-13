@@ -6,19 +6,20 @@ import sfu.cmpt307.twoThreeTree.TwoThreeTree;
 public class Interpreter {
 
 	private InputScanner scanner;
+	private TwoThreeTree tree;
 
 	public Interpreter(InputScanner scanner) {
 		this.scanner = scanner;
+		tree = initializeTreeElements();
 	}
 
-	public static void runInterpreter(InputScanner scanner) {
+	public static void makeAndRunInterpreter(InputScanner scanner) {
 		Interpreter interpreter = new Interpreter(scanner);
 		interpreter.run();
 	}
 
 	public void run() {
-		TwoThreeTree tree = initializeTreeElements();
-		runOperations(tree);
+		runOperations();
 	}
 
 	private TwoThreeTree initializeTreeElements() {
@@ -34,60 +35,28 @@ public class Interpreter {
 		return tree;
 	}
 
-	private void runOperations(TwoThreeTree tree) {
-		System.out
-				.println("\n------------------------- Tree Operations ------------------------------\n");
+	private void runOperations() {
+		Logger.logOperationStart();
 		for (Operation operation : scanner.getOperations()) {
 			Logger.logOperation(operation);
 			switch (operation.getOperator()) {
 			case INSERT:
-				tree.insert(operation.getOperandValue());
-				TwoThreeNode inserted = tree
-						.search(operation.getOperandValue());
-				Logger.logResult("Ater insertion, " + inserted + " is the "
-						+ tree.findElementPosition(operation.getOperandValue())
-						+ " element of the list");
+				doInsert(operation);
 				break;
 			case DELETE:
-				try {
-					tree.delete(operation.getOperandValue());
-					Logger.logResult("Deleted element "
-							+ operation.getOperandValue());
-				} catch (IllegalArgumentException e) {
-					Logger.logResult(e.getMessage());
-				}
+				doDelete(operation);
 				break;
 			case FIND:
-				try {
-					TwoThreeNode result = tree.search(operation
-							.getOperandValue());
-					Logger.logResult("Found - " + result.getKey() + " is the "
-							+ tree.findElementPosition(result.getKey())
-							+ " element in the list");
-				} catch (IllegalArgumentException e) {
-					Logger.logResult(e.getMessage());
-				}
+				doFind(operation);
 				break;
 			case KthSMALLEST:
-				try {
-					int result = tree.findKthSmallest(operation
-							.getOperandValue());
-					Logger.logResult(result + " is the "
-							+ operation.getOperandValue()
-							+ "st/nd/th smallest element");
-				} catch (IllegalArgumentException e) {
-					Logger.logResult(e.getMessage());
-				}
+				doSelection(operation);
 				break;
 			case MAX:
-				int maxResult = tree.max();
-				Logger.logResult(maxResult
-						+ " is the maximum element in the tree");
+				doMax();
 				break;
 			case MIN:
-				int minResult = tree.min();
-				Logger.logResult(minResult
-						+ " is the minimum element in the tree");
+				doMin();
 				break;
 			case INVALID_OPERATOR:
 				Logger.logResult("***Invalid Tree Operation***");
@@ -97,8 +66,58 @@ public class Interpreter {
 			}
 		}
 		tree.printLeaves();
-		tree.printFullTree();
 	}
+
+	private void doSelection(Operation operation) {
+		try {
+			int result = tree.findKthSmallest(operation.getOperandValue());
+			Logger.logResult(result + " is the " + operation.getOperandValue()
+					+ "st/nd/th smallest element");
+		} catch (IllegalArgumentException e) {
+			Logger.logResult(e.getMessage());
+		}
+	}
+
+	private void doFind(Operation operation) {
+		try {
+			TwoThreeNode result = tree.search(operation.getOperandValue());
+			Logger.logResult("Found - " + result.getKey() + " is the "
+					+ tree.findElementPosition(result.getKey())
+					+ " element in the list");
+		} catch (IllegalArgumentException e) {
+			Logger.logResult(e.getMessage());
+		}
+	}
+
+	private void doDelete(Operation operation) {
+		try {
+			tree.delete(operation.getOperandValue());
+			Logger.logResult("Deleted element " + operation.getOperandValue());
+		} catch (IllegalArgumentException e) {
+			Logger.logResult(e.getMessage());
+		}
+	}
+
+	private void doInsert(Operation operation) {
+		tree.insert(operation.getOperandValue());
+		TwoThreeNode inserted = tree.search(operation.getOperandValue());
+		Logger.logResult("Ater insertion, " + inserted + " is the "
+				+ tree.findElementPosition(operation.getOperandValue())
+				+ " element of the list");
+	}
+
+	private void doMin() {
+		int minResult = tree.min();
+		Logger.logResult(minResult + " is the minimum element in the tree");
+	}
+
+	private void doMax() {
+		int maxResult = tree.max();
+		Logger.logResult(maxResult + " is the maximum element in the tree");
+	}
+
+	// /////////////////////////////////////////////////////////////////////
+	// Inner static class for logging results
 
 	static class Logger {
 
@@ -108,6 +127,11 @@ public class Interpreter {
 
 		public static void logResult(String msg) {
 			System.out.print(msg + "\n");
+		}
+
+		public static void logOperationStart() {
+			System.out
+					.println("\n------------------------- Tree Operations ------------------------------\n");
 		}
 	}
 }
