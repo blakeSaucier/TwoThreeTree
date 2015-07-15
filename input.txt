@@ -1,13 +1,9 @@
 4,2,19,-5,6,2,9,8,7,3
-Find 3
-Max
-Min
+Find 4
 Insert 12
 Insert 6
-Fnd 3
+Find 3
 Delete 4
-Delete 3
-Delete 1
 Find 1
-KSmallest 3
+Selection 5
 Insert 15

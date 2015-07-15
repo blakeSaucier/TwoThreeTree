@@ -66,15 +66,16 @@ public class TwoThreeTree {
 	public void printFullTree() {
 		System.out
 				.println("\n-------------------------- 2-3 Tree -------------------------------\n");
-		root.printFullTree();
+		root.printSubTree();
 	}
 
-	public void printLeaves() {
-		System.out
-				.println("\n-------------------------- Tree Leaves -------------------------------");
-		System.out.print("[ ");
-		depthFirstPrint(root);
-		System.out.print(" ]");
+	public String getLeaves() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(System.lineSeparator() + "-------------------------- Tree Leaves -------------------------------" + System.lineSeparator());
+		builder.append("[ ");
+		depthFirstPrint(root, builder);
+		builder.append(" ]");
+		return builder.toString();
 	}
 
 	public int max() {
@@ -179,16 +180,16 @@ public class TwoThreeTree {
 		return node;
 	}
 
-	private void depthFirstPrint(TwoThreeNode node) {
+	private void depthFirstPrint(TwoThreeNode node, StringBuilder builder) {
 		if (node.isLeaf()) {
 			if (node.getKey() == max()) {
-				System.out.print(node.getKey());
+				builder.append(node.getKey());
 			} else {
-				System.out.print(node.getKey() + ", ");
+				builder.append(node.getKey() + ", ");
 			}
 		} else {
 			for (int i = 0; i < node.numChildren(); i++) {
-				depthFirstPrint(node.getChild(i));
+				depthFirstPrint(node.getChild(i), builder);
 			}
 		}
 	}

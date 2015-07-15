@@ -151,13 +151,16 @@ public class TwoThreeNode implements Comparable<TwoThreeNode> {
 							+ String.valueOf(totalLeafsUnderneath)) + " ]";
 		}
 	}
+	
+	//////////////////////////////////////////////////////////////////
+	// call on the root node of a tree to print the entire tree
 
-	public void printFullTree() {
+	public void printSubTree() {
 		print("", true);
 	}
 
 	// ///////////////////////////////////////////////////////////////
-	// Recursively prints the 2-3 tree in the console
+	// Recursively print the 2-3 nodes under this one
 
 	private void print(String prefix, boolean isTail) {
 		System.out.println(prefix + (isTail ? "--- " : "|-- ") + this);

@@ -1,5 +1,7 @@
 package sfu.cmpt307.handleInput;
 
+import java.io.FileNotFoundException;
+
 import sfu.cmpt307.twoThreeTree.TwoThreeNode;
 import sfu.cmpt307.twoThreeTree.TwoThreeTree;
 
@@ -15,13 +17,15 @@ public class Interpreter {
 		tree = initializeTreeElements();
 	}
 
-	public static void makeAndRunInterpreter(InputScanner scanner) {
+	public static void makeAndRunInterpreter(InputScanner scanner) throws FileNotFoundException {
 		Interpreter interpreter = new Interpreter(scanner);
 		interpreter.run();
 	}
 
-	public void run() {
+	public void run() throws FileNotFoundException {
 		runOperations();
+		logger.logLeaves(tree.getLeaves());
+		logger.writeLogToFile();
 	}
 
 	private TwoThreeTree initializeTreeElements() {
@@ -67,15 +71,13 @@ public class Interpreter {
 				logger.logResult("Unknown Tree Operation");
 			}
 		}
-		logger.print();
-		tree.printLeaves();
 	}
 
 	private void doSelection(Operation operation) {
 		try {
 			int result = tree.findKthSmallest(operation.getOperandValue());
 			logger.logResult(result + " is the " + operation.getOperandValue()
-					+ "st/nd/th smallest element");
+					+ " smallest element");
 		} catch (IllegalArgumentException e) {
 			logger.logResult(e.getMessage());
 		}
