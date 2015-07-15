@@ -10,16 +10,18 @@ import java.util.List;
 
 public class InputScanner {
 	
+	private static final String INPUT_FILE = "input.txt";
+	
 	private BufferedReader reader;
 	private List<Integer> initialTreeElements = new ArrayList<Integer>();
 	private List<Operation> operations = new ArrayList<Operation>();
 	
-	public InputScanner(String fileName) throws FileNotFoundException {
-		reader = new BufferedReader(new FileReader(fileName));
+	public InputScanner() throws FileNotFoundException {
+		reader = new BufferedReader(new FileReader(INPUT_FILE));
 	}
 	
-	public static InputScanner scan(String fileName) throws FileNotFoundException {
-		InputScanner scanner = new InputScanner(fileName);
+	public static InputScanner scan() throws FileNotFoundException {
+		InputScanner scanner = new InputScanner();
 		scanner.readFile();
 		return scanner;
 	}
