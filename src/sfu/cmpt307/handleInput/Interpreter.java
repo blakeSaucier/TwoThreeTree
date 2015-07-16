@@ -106,7 +106,7 @@ public class Interpreter {
 	private void doInsert(Operation operation) {
 		tree.insert(operation.getOperandValue());
 		TwoThreeNode inserted = tree.search(operation.getOperandValue());
-		logger.logResult("Ater insertion, " + inserted + " is the "
+		logger.logResult("After insertion, " + inserted + " is the "
 				+ tree.findElementPosition(operation.getOperandValue())
 				+ " element of the list");
 	}
