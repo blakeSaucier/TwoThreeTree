@@ -17,7 +17,11 @@ public class TwoThreeTree {
 	public static TwoThreeTree manuallyInitTwoNodes(List<Integer> elements) {
 		TwoThreeNode root = new TwoThreeNode();
 		TwoThreeNode one = new TwoThreeNode(elements.get(0));
-		TwoThreeNode two = new TwoThreeNode(elements.get(1));
+		int nextElementIndex = 1;
+		while(elements.get(nextElementIndex) == elements.get(0)) {
+			nextElementIndex++;
+		}
+		TwoThreeNode two = new TwoThreeNode(elements.get(nextElementIndex));
 
 		root.addChild(one);
 		root.addChild(two);
