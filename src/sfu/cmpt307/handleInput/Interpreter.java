@@ -17,7 +17,8 @@ public class Interpreter {
 		tree = initializeTreeElements();
 	}
 
-	public static void makeAndRunInterpreter(InputScanner scanner) throws FileNotFoundException {
+	public static void makeAndRunInterpreter(InputScanner scanner)
+			throws FileNotFoundException {
 		Interpreter interpreter = new Interpreter(scanner);
 		interpreter.run();
 	}
@@ -35,6 +36,9 @@ public class Interpreter {
 		}
 		TwoThreeTree tree = TwoThreeTree.manuallyInitTwoNodes(scanner
 				.getInitalTreeElements());
+
+		// First two elements will already be in the tree - this is not a
+		// problem as Insert() ignores duplicates
 		for (Integer element : scanner.getInitalTreeElements()) {
 			tree.insert(element);
 		}
